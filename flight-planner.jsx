@@ -2,7 +2,7 @@ import { useState, useRef } from "react";
 
 // ─── Gemini API key injected at build time from GitHub secret ─────────────────
 const GEMINI_KEY = import.meta.env.VITE_GEMINI_API_KEY || "";
-const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:streamGenerateContent?alt=sse&key=${GEMINI_KEY}`;
+const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:streamGenerateContent?alt=sse&key=${GEMINI_KEY}`;
 
 // ─── Theme ────────────────────────────────────────────────────────────────────
 const T = {
@@ -268,6 +268,8 @@ export default function FlightPlanner() {
     setActiveResult(null);
     for (const id of selectedAnalyses) {
       await runAnalysis(id);
+      // Small delay between requests to stay within free tier rate limits
+      await new Promise(r => setTimeout(r, 2000));
     }
   }
 
